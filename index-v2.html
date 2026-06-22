@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS v5.0 · Intelligence System by Vikas Gaddam</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0A0A0A;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1A1A1A;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.65);
+            --text-tertiary: rgba(255, 255, 255, 0.45);
+            --accent-primary: #8B5CF6;
+            --accent-secondary: #06B6D4;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --success: #10B981;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* AURORA BACKGROUND */
+        .aurora {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .aurora::before,
+        .aurora::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at center,
+                rgba(139, 92, 246, 0.15) 0%,
+                rgba(6, 182, 212, 0.1) 30%,
+                transparent 70%);
+            animation: aurora 15s ease-in-out infinite;
+        }
+
+        .aurora::after {
+            background: radial-gradient(circle at center,
+                rgba(6, 182, 212, 0.15) 0%,
+                rgba(139, 92, 246, 0.1) 30%,
+                transparent 70%);
+            animation: aurora 20s ease-in-out infinite reverse;
+        }
+
+        @keyframes aurora {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(30%, -30%) rotate(120deg);
+            }
+            66% {
+                transform: translate(-20%, 20%) rotate(240deg);
+            }
+        }
+
+        /* CONTAINER */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 96px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg,
+                var(--accent-primary) 0%,
+                var(--accent-secondary) 50%,
+                #FFFFFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 8s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .tagline {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            max-width: 700px;
+        }
+
+        .tagline span {
+            color: var(--accent-secondary);
+            font-weight: 700;
+        }
+
+        /* STATS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            margin-bottom: 64px;
+            max-width: 1000px;
+        }
+
+        .stat {
+            background: var(--bg-secondary);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg,
+                var(--accent-primary),
+                var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* CTA BUTTONS */
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg,
+                var(--accent-primary),
+                var(--accent-secondary));
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-tertiary);
+        }
+
+        /* DEMO SECTION */
+        .demo-section {
+            padding: 120px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .demo-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            transition: all 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        #analyzeBtn {
+            width: 100%;
+        }
+
+        #analyzeBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 48px;
+            color: var(--text-secondary);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #results {
+            display: none;
+            margin-top: 48px;
+        }
+
+        #results.active {
+            display: block;
+        }
+
+        .result-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .copy-btn-small {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn-small:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--border-hover);
+        }
+
+        .copy-btn-small.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+
+        .result-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            color: var(--text-secondary);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .priority-p0 {
+            background: rgba(239, 68, 68, 0.1);
+            color: #FCA5A5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .priority-p1 {
+            background: rgba(245, 158, 11, 0.1);
+            color: #FCD34D;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .priority-p2 {
+            background: rgba(6, 182, 212, 0.1);
+            color: #67E8F9;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .priority-p3 {
+            background: rgba(16, 185, 129, 0.1);
+            color: #6EE7B7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 80px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 120px;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora"></div>
+
+    <div class="container">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="logo">Intelligence System</div>
+            <h1>COMPASS</h1>
+            <p class="tagline">
+                <span>44 minutes → 45 seconds.</span><br>
+                Social media escalation analysis powered by AI.
+            </p>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">98.3%</div>
+                    <div class="stat-label">Efficiency</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$1.7M</div>
+                    <div class="stat-label">Annual Value</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">14.4</div>
+                    <div class="stat-label">FTE Saved</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">&lt;45s</div>
+                    <div class="stat-label">Analysis Time</div>
+                </div>
+            </div>
+
+            <div class="cta-group">
+                <a href="#demo" class="btn btn-primary">Try Live Demo →</a>
+                <a href="https://linkedin.com/in/vikasgaddam" target="_blank" class="btn btn-secondary">View Profile</a>
+            </div>
+
+            <p style="font-size: 13px; color: var(--text-tertiary); margin-top: 24px;">
+                Built by <strong style="color: var(--text-secondary);">Vikas Gaddam</strong> · Operations Analyst → AI Builder
+            </p>
+        </section>
+
+        <!-- DEMO SECTION -->
+        <section id="demo" class="demo-section">
+            <div class="section-header">
+                <h2 class="section-title">Live Demo</h2>
+                <p class="section-subtitle">Paste a social media post and watch COMPASS analyze it in seconds</p>
+            </div>
+
+            <div class="demo-container">
+                <div class="demo-badge">
+                    ✅ LIVE · No API key needed!
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">Social Media Post</div>
+                    <textarea id="postInput" placeholder="Paste a customer's social media post here...
+
+Example:
+Our entire sales team can't log into Agentforce this morning. We've had Case #45678901 open for 6 hours with no response. This is costing us thousands in pipeline during Q4 close. @benioff can someone please help us?"></textarea>
+                </div>
+
+                <button id="analyzeBtn" class="btn btn-primary">
+                    🔍 Analyze with COMPASS
+                </button>
+
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing post with Claude API...</p>
+                </div>
+
+                <div id="results"></div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-text">
+                COMPASS v5.0 · Built by Vikas Gaddam at Salesforce
+            </div>
+            <div class="footer-links">
+                <a href="https://linkedin.com/in/vikasgaddam" target="_blank" class="footer-link">LinkedIn</a>
+                <a href="https://github.com/vikasgaddam" target="_blank" class="footer-link">GitHub</a>
+                <a href="mailto:vikas@salesforce.com" class="footer-link">Email</a>
+            </div>
+            <div class="footer-text" style="font-size: 12px; margin-top: 16px;">
+                Powered by Claude (Anthropic) · Hosted on GitHub Pages
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Your Cloudflare Worker URL
+        const WORKER_URL = 'https://compass-api-proxy.vikasvikki1710.workers.dev/';
+
+        // DOM elements
+        const postInput = document.getElementById('postInput');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+
+        // Analyze button click handler
+        analyzeBtn.addEventListener('click', async () => {
+            const post = postInput.value.trim();
+
+            if (!post) {
+                alert('⚠️ Please paste a social media post');
+                return;
+            }
+
+            // Show loading
+            analyzeBtn.disabled = true;
+            loading.classList.add('active');
+            results.classList.remove('active');
+            results.innerHTML = '';
+
+            try {
+                // Call your Cloudflare Worker
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ post })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Analysis failed');
+                }
+
+                const analysis = await response.json();
+
+                // Display results
+                displayResults(analysis);
+
+            } catch (error) {
+                alert('⚠️ Analysis failed: ' + error.message);
+                console.error('Error:', error);
+            } finally {
+                analyzeBtn.disabled = false;
+                loading.classList.remove('active');
+            }
+        });
+
+        function displayResults(analysis) {
+    const priorityClass = analysis.priority ? analysis.priority.toLowerCase() : 'p3';
+    
+    results.innerHTML = `
+        <div class="priority-badge priority-${priorityClass}">
+            🔴 ${analysis.priority || 'P3'} · SLA: ${analysis.sla || '240 minutes'}
+        </div>
+
+        <div class="result-card">
+            <div class="result-header">
+                <div class="result-title">🔍 Detection Summary</div>
+            </div>
+            <div class="result-content">Account: ${analysis.account || 'Unknown'}
+Platform: ${analysis.platform || 'Unknown'}
+Case Number: ${analysis.case_number || 'None detected'}
+Exec Detected: ${analysis.exec_detected || 'None'}
+Risk Vectors: ${analysis.risk_vectors ? analysis.risk_vectors.join(', ') : 'None'}
+
+${analysis.detection_summary || ''}</div>
+        </div>
+
+        <div class="result-card">
+            <div class="result-header">
+                <div class="result-title">📤 Chatter Post</div>
+                <button class="copy-btn-small" onclick="copyToClipboard('chatter', this)">Copy</button>
+            </div>
+            <div class="result-content" id="chatter-content">${analysis.chatter_post || ''}</div>
+        </div>
+
+        <div class="result-card">
+            <div class="result-header">
+                <div class="result-title">💬 Sprout Social Reply</div>
+                <button class="copy-btn-small" onclick="copyToClipboard('sprout', this)">Copy</button>
+            </div>
+            <div class="result-content" id="sprout-content">${analysis.sprout_reply || ''}</div>
+        </div>
+
+        <div class="result-card">
+            <div class="result-header">
+                <div class="result-title">✉️ DM Opener</div>
+                <button class="copy-btn-small" onclick="copyToClipboard('dm', this)">Copy</button>
+            </div>
+            <div class="result-content" id="dm-content">${analysis.dm_opener || ''}</div>
+        </div>
+    `;
+
+    results.style.display = 'block';
+    results.classList.add('active');
+    results.scrollIntoView({ behavior: 'smooth' });
+}
+        function copyToClipboard(id, button) {
+            const element = document.getElementById(id + '-content');
+            const text = element.textContent.trim();
+            const originalHTML = button.innerHTML;
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    button.innerHTML = '✓ Copied!';
+                    button.classList.add('success');
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('success');
+                    }, 2000);
+                }).catch(() => {
+                    fallbackCopy(text, button, originalHTML);
+                });
+            } else {
+                fallbackCopy(text, button, originalHTML);
+            }
+        }
+
+        function fallbackCopy(text, button, originalHTML) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                button.innerHTML = '✓ Copied!';
+                button.classList.add('success');
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('success');
+                }, 2000);
+            } catch (e) {
+                button.innerHTML = '⚠️ Failed';
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        // Smooth scroll for CTA
+        document.querySelector('a[href="#demo"]').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
